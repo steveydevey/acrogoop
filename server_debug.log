@@ -1,0 +1,44 @@
+     warning: function player_has_voted?/2 is unused
+     │
+ 219 │   defp player_has_voted?(_game, _player_id) do
+     │        ~
+     │
+     └─ lib/acrogoop_web/live/game_live.ex:219:8: AcrogoopWeb.GameLive (module)
+
+[info] Running AcrogoopWeb.Endpoint with Bandit 1.7.0 at 127.0.0.1:4000 (http)
+[info] Access AcrogoopWeb.Endpoint at http://localhost:4000
+[watch] build finished, watching for changes...
+[info] CONNECTED TO Phoenix.LiveView.Socket in 15µs
+  Transport: :longpoll
+  Serializer: Phoenix.Socket.V2.JSONSerializer
+  Parameters: %{"_csrf_token" => "eAgrUi1WXmoDPRp-Dh49DFB7LWswCSsv1ZS1JdjR1_WGc_jZiVoSXznY", "_live_referer" => "undefined", "_mount_attempts" => "0", "_mounts" => "1", "_track_static" => %{"0" => "http://localhost:4000/assets/app.css", "1" => "http://localhost:4000/assets/app.js"}, "vsn" => "2.0.0"}
+[debug] MOUNT AcrogoopWeb.GameLive
+  Parameters: %{"code" => "KBCDZT", "s" => "BbfC bvRgyTSS1T4KW/E6w=="}
+  Session: %{"_csrf_token" => "IRxcg2482bM9mAWV9-B8hsEv", "session_id" => "BbfC+bvRgyTSS1T4KW/E6w=="}
+[info] GameLive Mount - Code: KBCDZT, Session ID: BbfC bvRgyTSS1T4KW/E6w==, URL param: BbfC bvRgyTSS1T4KW/E6w==
+[debug] QUERY OK source="games" db=0.5ms decode=0.6ms idle=74.0ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["KBCDZT"]
+[90m↳ AcrogoopWeb.GameLive.mount/3, at: lib/acrogoop_web/live/game_live.ex:18[0m
+[debug] QUERY OK source="games" db=0.1ms idle=81.8ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["KBCDZT"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:155[0m
+[debug] QUERY OK source="games" db=0.0ms idle=83.8ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["690cd9e4-d5f7-4367-9817-90f3c9ecb6d9"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=84.4ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["690cd9e4-d5f7-4367-9817-90f3c9ecb6d9", 1]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:156[0m
+[debug] QUERY OK source="players" db=0.0ms idle=85.4ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["690cd9e4-d5f7-4367-9817-90f3c9ecb6d9"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[info] Refresh game state - Session ID: BbfC bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steve", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[debug] QUERY OK source="players" db=0.0ms idle=86.1ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE ((p0."game_id" = ?) AND (p0."session_id" = ?)) ["690cd9e4-d5f7-4367-9817-90f3c9ecb6d9", "BbfC bvRgyTSS1T4KW/E6w=="]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:170[0m
+[info] Found player by session: nil
+[debug] Replied in 20ms
+
+Rebuilding...
+
+Done in 132ms.

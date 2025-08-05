@@ -1,0 +1,189 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <!-- Game Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-gray-800">Acrogoop</h1>
+      <p class="text-lg text-gray-600">Game Code: <span class="font-mono font-bold"><%= @game.code %></span></p>
+      <p class="text-sm text-gray-500">
+        Round <%= @game.current_round %>/<%= @game.rounds_total %>
+        <%= if @time_remaining > 0 do %>
+          • <%= @time_remaining %>s remaining
+        <% end %>
+      </p>
+    </div>
+
+    <%= if @player == nil do %>
+      <!-- Join Game Form -->
+      <div class="max-w-md mx-auto">
+        <h2 class="text-xl font-semibold mb-4">Join Game</h2>
+        <form phx-submit="join_game" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Your Name</label>
+            <input
+              type="text"
+              name="player_name"
+              value={@player_name}
+              phx-change="update_player_name"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            Join Game
+          </button>
+        </form>
+      </div>
+    <% else %>
+      <!-- Game Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Game Area -->
+        <div class="lg:col-span-2">
+          <%= case @game.status do %>
+            <% :waiting -> %>
+              <div class="text-center">
+                <h2 class="text-xl font-semibold mb-4">Waiting for players...</h2>
+                <p class="text-gray-600 mb-4">Share the game code <span class="font-mono font-bold"><%= @game.code %></span> with other players</p>
+                <%= if can_start_game?(@game, @player, @players) do %>
+                  <button
+                    phx-click="start_game"
+                    class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Start Game
+                  </button>
+                <% else %>
+                  <%= if @player && @player.is_creator do %>
+                    <div class="text-center">
+                      <p class="text-gray-600 mb-2">Need at least 3 players to start</p>
+                      <p class="text-sm text-gray-500">Currently: <%= length(@players) %> player(s)</p>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+
+            <% :in_progress -> %>
+              <div>
+                <h2 class="text-xl font-semibold mb-4">Create a phrase using these letters:</h2>
+                <div class="text-center mb-6">
+                  <div class="text-4xl font-mono font-bold tracking-widest text-indigo-600">
+                    <%= @game.current_letters %>
+                  </div>
+                </div>
+
+                <%= if player_has_submitted?(@submissions, @player.id) do %>
+                  <div class="text-center">
+                    <p class="text-green-600 font-semibold">✓ Phrase submitted!</p>
+                    <p class="text-gray-600">Waiting for other players...</p>
+                  </div>
+                <% else %>
+                  <form phx-submit="submit_phrase" class="space-y-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700">Your phrase:</label>
+                      <input
+                        type="text"
+                        name="phrase"
+                        value={@phrase_input}
+                        phx-change="update_phrase"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        placeholder="Enter your creative phrase..."
+                        required
+                      />
+                      <p class="text-xs text-gray-500 mt-1">
+                        Create a phrase where each word starts with the given letters in order
+                      </p>
+                    </div>
+                    <button
+                      type="submit"
+                      class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                      Submit Phrase
+                    </button>
+                  </form>
+                <% end %>
+              </div>
+
+            <% :voting -> %>
+              <div>
+                <h2 class="text-xl font-semibold mb-4">Vote for your favorite phrase:</h2>
+                <div class="space-y-3">
+                  <%= for submission <- @submissions do %>
+                    <div class={"border rounded-lg p-4 #{if submission.player_id == @player.id, do: "bg-blue-50 border-blue-200", else: "hover:bg-gray-50"}"}>
+                      <div class="flex justify-between items-center">
+                        <div>
+                          <p class="font-medium"><%= submission.phrase %></p>
+                          <p class="text-sm text-gray-500">
+                            by <%= submission.player.name %>
+                            <%= if submission.player_id == @player.id do %>
+                              <span class="text-blue-600 font-medium">(You)</span>
+                            <% end %>
+                          </p>
+                        </div>
+                        <%= if submission.player_id != @player.id do %>
+                          <button
+                            phx-click="vote"
+                            phx-value-submission_id={submission.id}
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          >
+                            Vote
+                          </button>
+                        <% else %>
+                          <div class="text-gray-400 text-sm italic px-4 py-2">
+                            Your submission
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+            <% :completed -> %>
+              <div class="text-center">
+                <h2 class="text-2xl font-semibold mb-4">🎉 Game Complete!</h2>
+                <p class="text-gray-600">Thanks for playing!</p>
+              </div>
+          <% end %>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <!-- Players List -->
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-semibold mb-3">Players (<%= length(@players) %>)</h3>
+            <div class="space-y-2">
+              <%= for player <- @players do %>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm">
+                    <%= player.name %>
+                    <%= if player.is_creator do %>
+                      <span class="text-xs text-indigo-600">👑</span>
+                    <% end %>
+                  </span>
+                  <span class="text-sm font-medium"><%= player.score %>pts</span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Current Round Submissions -->
+          <%= if @game.status in [:voting, :in_progress] and length(@submissions) > 0 do %>
+            <div class="bg-gray-50 rounded-lg p-4 mt-4">
+              <h3 class="font-semibold mb-3">Submissions</h3>
+              <div class="space-y-2">
+                <%= for submission <- @submissions do %>
+                  <div class="text-sm">
+                    <p class="font-medium"><%= submission.phrase %></p>
+                    <p class="text-gray-500">by <%= submission.player.name %></p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

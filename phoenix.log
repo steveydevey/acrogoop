@@ -1,0 +1,387 @@
+[info] Running AcrogoopWeb.Endpoint with Bandit 1.7.0 at 127.0.0.1:4000 (http)
+[info] Access AcrogoopWeb.Endpoint at http://localhost:4000
+[watch] build finished, watching for changes...
+
+Rebuilding...
+
+Done in 142ms.
+[info] GET /
+[debug] Processing with AcrogoopWeb.HomeLive.index/2
+  Parameters: %{}
+  Pipelines: [:browser]
+[info] HomeLive Mount - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Sent 200 in 41ms
+[info] CONNECTED TO Phoenix.LiveView.Socket in 18µs
+  Transport: :websocket
+  Serializer: Phoenix.Socket.V2.JSONSerializer
+  Parameters: %{"_csrf_token" => "LBELVwkLbntRWxkAXysDPn53cHsJJxEeeCs4n9ZCc9T92jThGZ2CaTTh", "_live_referer" => "undefined", "_mount_attempts" => "0", "_mounts" => "0", "_track_static" => %{"0" => "http://localhost:4000/assets/app.css", "1" => "http://localhost:4000/assets/app.js"}, "vsn" => "2.0.0"}
+[debug] MOUNT AcrogoopWeb.HomeLive
+  Parameters: %{}
+  Session: %{"_csrf_token" => "IRxcg2482bM9mAWV9-B8hsEv", "session_id" => "BbfC+bvRgyTSS1T4KW/E6w=="}
+[info] HomeLive Mount - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[debug] Replied in 110µs
+[info] GET /
+[debug] Processing with AcrogoopWeb.HomeLive.index/2
+  Parameters: %{}
+  Pipelines: [:browser]
+[info] HomeLive Mount - Session ID: UXpB/l4jJketug+3B/j/9g==
+[info] Sent 200 in 376µs
+[debug] HANDLE EVENT "update_creator_name" in AcrogoopWeb.HomeLive
+  Parameters: %{"_target" => ["creator_name"], "creator_name" => "stever"}
+[debug] Replied in 255µs
+[debug] HANDLE EVENT "update_creator_name" in AcrogoopWeb.HomeLive
+  Parameters: %{"_target" => ["creator_name"], "creator_name" => "steverd"}
+[debug] Replied in 400µs
+[debug] HANDLE EVENT "create_game" in AcrogoopWeb.HomeLive
+  Parameters: %{"creator_name" => "steverd", "round_time_limit" => "10", "rounds_total" => "3", "voting_time_limit" => "10"}
+[info] Creating game with session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[debug] QUERY OK source="games" db=0.3ms queue=0.2ms idle=1893.9ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ Acrogoop.Games.generate_unique_code/0, at: lib/acrogoop/games.ex:225[0m
+[debug] QUERY OK source="games" db=0.3ms idle=923.0ms
+INSERT INTO "games" ("code","voting_time_limit","rounds_total","round_time_limit","creator_name","current_round","inserted_at","updated_at","id") VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9) ["XYJLXM", 10, 3, 10, "steverd", 1, ~U[2025-08-05 18:20:23Z], ~U[2025-08-05 18:20:23Z], "56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.create_game_with_creator/3, at: lib/acrogoop/games.ex:33[0m
+[debug] QUERY OK source="players" db=0.2ms idle=925.1ms
+INSERT INTO "players" ("name","session_id","game_id","is_creator","score","inserted_at","updated_at","id") VALUES (?1,?2,?3,?4,?5,?6,?7,?8) ["steverd", "BbfC+bvRgyTSS1T4KW/E6w==", "56a59750-7d48-4480-a81d-e7f213f84666", true, 0, ~U[2025-08-05 18:20:23Z], ~U[2025-08-05 18:20:23Z], "a9dfe85d-cb57-4280-a2f4-4336d901459d"]
+[90m↳ Acrogoop.Games.create_game_with_creator/3, at: lib/acrogoop/games.ex:35[0m
+[info] Game created: XYJLXM, redirecting...
+[debug] Replied in 55ms
+[info] GET /game/XYJLXM
+[debug] Processing with AcrogoopWeb.GameLive.show/2
+  Parameters: %{"code" => "XYJLXM", "s" => "BbfC bvRgyTSS1T4KW/E6w=="}
+  Pipelines: [:browser]
+[info] GameLive Mount - Code: XYJLXM, Session ID: BbfC+bvRgyTSS1T4KW/E6w==, URL param: BbfC bvRgyTSS1T4KW/E6w==
+[debug] QUERY OK source="games" db=0.1ms idle=950.6ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.mount/3, at: lib/acrogoop_web/live/game_live.ex:20[0m
+[debug] QUERY OK source="games" db=0.0ms idle=953.9ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.0ms idle=955.8ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=956.0ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 1]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.0ms idle=956.2ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[debug] QUERY OK source="players" db=0.0ms idle=64.1ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE ((p0."game_id" = ?) AND (p0."session_id" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", "BbfC+bvRgyTSS1T4KW/E6w=="]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:172[0m
+[info] Found player by session: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[info] Sent 200 in 11ms
+[info] CONNECTED TO Phoenix.LiveView.Socket in 8µs
+  Transport: :websocket
+  Serializer: Phoenix.Socket.V2.JSONSerializer
+  Parameters: %{"_csrf_token" => "HxcxJglxblsAFwdmDDMjewpqBW4SJnEuVEIEnCZc2uJ_art-3GGVzU4X", "_live_referer" => "undefined", "_mount_attempts" => "0", "_mounts" => "0", "_track_static" => %{"0" => "http://localhost:4000/assets/app.css", "1" => "http://localhost:4000/assets/app.js"}, "vsn" => "2.0.0"}
+[debug] MOUNT AcrogoopWeb.GameLive
+  Parameters: %{"code" => "XYJLXM", "s" => "BbfC bvRgyTSS1T4KW/E6w=="}
+  Session: %{"_csrf_token" => "IRxcg2482bM9mAWV9-B8hsEv", "session_id" => "BbfC+bvRgyTSS1T4KW/E6w=="}
+[info] GameLive Mount - Code: XYJLXM, Session ID: BbfC+bvRgyTSS1T4KW/E6w==, URL param: BbfC bvRgyTSS1T4KW/E6w==
+[debug] QUERY OK source="games" db=0.1ms idle=112.9ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.mount/3, at: lib/acrogoop_web/live/game_live.ex:20[0m
+[debug] QUERY OK source="games" db=0.1ms idle=111.1ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.1ms idle=88.9ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=89.0ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 1]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.0ms idle=86.3ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[debug] QUERY OK source="players" db=0.1ms idle=83.2ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE ((p0."game_id" = ?) AND (p0."session_id" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", "BbfC+bvRgyTSS1T4KW/E6w=="]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:172[0m
+[info] Found player by session: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[debug] Replied in 1ms
+[debug] HANDLE EVENT "start_game" in AcrogoopWeb.GameLive
+  Parameters: %{"value" => ""}
+[debug] QUERY OK source="games" db=0.1ms idle=1553.6ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.start_game/1, at: lib/acrogoop/games.ex:78[0m
+[debug] QUERY OK source="games" db=0.1ms idle=1554.0ms
+UPDATE "games" SET "status" = ?, "current_letters" = ?, "updated_at" = ? WHERE "id" = ? [:in_progress, "BBSFEU", ~U[2025-08-05 18:20:32Z], "56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.handle_event/3, at: lib/acrogoop_web/live/game_live.ex:65[0m
+[debug] QUERY OK source="games" db=0.0ms idle=1554.3ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.1ms idle=1554.5ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=554.6ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 1]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=1.6ms idle=554.8ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+warning: Range.new/2 and first..last default to a step of -1 when last < first. Use Range.new(first, last, -1) or first..last//-1, or pass 1 if that was your intention
+  (acrogoop 0.1.0) lib/acrogoop_web/live/game_live.ex:193: anonymous fn/2 in AcrogoopWeb.GameLive.start_round_timer/2
+
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[info] Found player by ID: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[debug] Replied in 3ms
+[debug] QUERY OK source="games" db=0.1ms idle=556.8ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.1ms idle=557.1ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=557.4ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 1]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.0ms idle=557.5ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[info] Found player by ID: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "B"}
+[debug] Replied in 230µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Be"}
+[debug] Replied in 376µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Bet"}
+[debug] Replied in 236µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Bett"}
+[debug] Replied in 230µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Bette"}
+[debug] Replied in 1ms
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better"}
+[debug] Replied in 261µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better "}
+[debug] Replied in 257µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better b"}
+[debug] Replied in 382µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better ba"}
+[debug] Replied in 672µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bak"}
+[debug] Replied in 264µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bake"}
+[debug] Replied in 255µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better baker"}
+[debug] Replied in 213µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers"}
+[debug] Replied in 115µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers "}
+[debug] Replied in 244µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers s"}
+[debug] Replied in 1ms
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers su"}
+[debug] Replied in 127µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers sur"}
+[debug] Replied in 346µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers sure"}
+[debug] Replied in 258µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surel"}
+[debug] Replied in 237µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely"}
+[debug] Replied in 197µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely "}
+[debug] Replied in 2ms
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely f"}
+[debug] Replied in 275µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fi"}
+[debug] Replied in 246µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fir"}
+[debug] Replied in 438µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire"}
+[debug] Replied in 254µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire "}
+[debug] Replied in 1ms
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire e"}
+[debug] Replied in 103µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire ev"}
+[debug] Replied in 133µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire eve"}
+[debug] Replied in 602µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire ever"}
+[debug] Replied in 222µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every"}
+[debug] Replied in 278µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every "}
+[debug] Replied in 254µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every u"}
+[debug] Replied in 184µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every un"}
+[debug] Replied in 429µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every und"}
+[debug] Replied in 264µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every unde"}
+[debug] Replied in 237µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every under"}
+[debug] Replied in 259µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every underl"}
+[debug] Replied in 329µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every underli"}
+[debug] Replied in 511µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every underlin"}
+[debug] Replied in 144µs
+[debug] HANDLE EVENT "update_phrase" in AcrogoopWeb.GameLive
+  Parameters: %{"_target" => ["phrase"], "phrase" => "Better bakers surely fire every underling"}
+[debug] Replied in 841µs
+[debug] QUERY OK source="games" db=0.4ms idle=1567.0ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.start_voting/1, at: lib/acrogoop/games.ex:109[0m
+[debug] QUERY OK source="games" db=0.6ms queue=0.1ms idle=1568.2ms
+UPDATE "games" SET "status" = ?, "updated_at" = ? WHERE "id" = ? [:voting, ~U[2025-08-05 18:20:42Z], "56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.handle_info/2, at: lib/acrogoop_web/live/game_live.ex:131[0m
+warning: Range.new/2 and first..last default to a step of -1 when last < first. Use Range.new(first, last, -1) or first..last//-1, or pass 1 if that was your intention
+  (acrogoop 0.1.0) lib/acrogoop_web/live/game_live.ex:202: anonymous fn/2 in AcrogoopWeb.GameLive.start_voting_timer/2
+
+[debug] QUERY OK source="games" db=0.2ms queue=0.1ms idle=569.5ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.3ms queue=0.1ms idle=570.3ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.2ms idle=571.1ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 1]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.2ms idle=571.5ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[info] Found player by ID: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[debug] QUERY OK source="games" db=0.6ms queue=0.1ms idle=1579.1ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="submissions" db=0.3ms queue=0.1ms idle=586.9ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at", s0."game_id" FROM "submissions" AS s0 WHERE (s0."game_id" = ?) ORDER BY s0."game_id" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="players" db=0.3ms queue=0.1ms idle=1587.4ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at", p0."game_id" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."game_id" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="votes" db=1.0ms queue=0.1ms idle=586.9ms
+SELECT v0."id", v0."round_number", v0."game_id", v0."player_id", v0."submission_id", v0."inserted_at", v0."updated_at", v0."game_id" FROM "votes" AS v0 WHERE (v0."game_id" = ?) ORDER BY v0."game_id" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="games" db=0.5ms idle=588.4ms
+UPDATE "games" SET "status" = ?, "current_round" = ?, "current_letters" = ?, "updated_at" = ? WHERE "id" = ? [:in_progress, 2, "ETCIEC", ~U[2025-08-05 18:20:52Z], "56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.handle_info/2, at: lib/acrogoop_web/live/game_live.ex:143[0m
+[debug] QUERY OK source="games" db=0.2ms idle=589.2ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.handle_info/2, at: lib/acrogoop_web/live/game_live.ex:147[0m
+[debug] QUERY OK source="games" db=0.5ms idle=589.7ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.3ms idle=590.4ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.1ms idle=590.9ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 2]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.3ms idle=591.2ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[info] Found player by ID: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[debug] QUERY OK source="games" db=0.1ms idle=1595.0ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.start_voting/1, at: lib/acrogoop/games.ex:109[0m
+[debug] QUERY OK source="games" db=0.1ms idle=1595.4ms
+UPDATE "games" SET "status" = ?, "updated_at" = ? WHERE "id" = ? [:voting, ~U[2025-08-05 18:21:02Z], "56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.handle_info/2, at: lib/acrogoop_web/live/game_live.ex:131[0m
+[debug] QUERY OK source="games" db=0.1ms idle=1595.8ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.0ms idle=596.2ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=596.4ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 2]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.1ms idle=596.6ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[info] Found player by ID: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[debug] QUERY OK source="games" db=0.2ms idle=1605.9ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="players" db=0.3ms idle=606.5ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at", p0."game_id" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."game_id" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="votes" db=0.4ms idle=606.6ms
+SELECT v0."id", v0."round_number", v0."game_id", v0."player_id", v0."submission_id", v0."inserted_at", v0."updated_at", v0."game_id" FROM "votes" AS v0 WHERE (v0."game_id" = ?) ORDER BY v0."game_id" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="submissions" db=0.5ms idle=606.6ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at", s0."game_id" FROM "submissions" AS s0 WHERE (s0."game_id" = ?) ORDER BY s0."game_id" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.complete_round/1, at: lib/acrogoop/games.ex:144[0m
+[debug] QUERY OK source="games" db=2.8ms idle=607.3ms
+UPDATE "games" SET "status" = ?, "current_round" = ?, "current_letters" = ?, "updated_at" = ? WHERE "id" = ? [:in_progress, 3, "ENGAPT", ~U[2025-08-05 18:21:12Z], "56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.handle_info/2, at: lib/acrogoop_web/live/game_live.ex:143[0m
+[debug] QUERY OK source="games" db=0.0ms idle=610.3ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.handle_info/2, at: lib/acrogoop_web/live/game_live.ex:147[0m
+[debug] QUERY OK source="games" db=0.0ms idle=610.5ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."code" = ?) ["XYJLXM"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:157[0m
+[debug] QUERY OK source="games" db=0.1ms idle=610.7ms
+SELECT g0."id", g0."code", g0."status", g0."rounds_total", g0."round_time_limit", g0."voting_time_limit", g0."current_round", g0."current_letters", g0."creator_name", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE (g0."id" = ?) ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ Acrogoop.Games.get_current_submissions/1, at: lib/acrogoop/games.ex:195[0m
+[debug] QUERY OK source="submissions" db=0.0ms idle=610.9ms
+SELECT s0."id", s0."phrase", s0."round_number", s0."submitted_at", s0."game_id", s0."player_id", s0."inserted_at", s0."updated_at" FROM "submissions" AS s0 WHERE ((s0."game_id" = ?) AND (s0."round_number" = ?)) ["56a59750-7d48-4480-a81d-e7f213f84666", 3]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:158[0m
+[debug] QUERY OK source="players" db=0.0ms idle=611.1ms
+SELECT p0."id", p0."name", p0."session_id", p0."score", p0."is_creator", p0."game_id", p0."inserted_at", p0."updated_at" FROM "players" AS p0 WHERE (p0."game_id" = ?) ORDER BY p0."score" DESC, p0."inserted_at" ["56a59750-7d48-4480-a81d-e7f213f84666"]
+[90m↳ AcrogoopWeb.GameLive.refresh_game_state/1, at: lib/acrogoop_web/live/game_live.ex:159[0m
+[info] Refresh game state - Session ID: BbfC+bvRgyTSS1T4KW/E6w==
+[info] Players in game: [{"steverd", "BbfC+bvRgyTSS1T4KW/E6w=="}]
+[info] Found player by ID: %Acrogoop.Player{__meta__: #Ecto.Schema.Metadata<:loaded, "players">, id: "a9dfe85d-cb57-4280-a2f4-4336d901459d", name: "steverd", session_id: "BbfC+bvRgyTSS1T4KW/E6w==", score: 0, is_creator: true, game_id: "56a59750-7d48-4480-a81d-e7f213f84666", game: #Ecto.Association.NotLoaded<association :game is not loaded>, submissions: #Ecto.Association.NotLoaded<association :submissions is not loaded>, votes: #Ecto.Association.NotLoaded<association :votes is not loaded>, inserted_at: ~U[2025-08-05 18:20:23Z], updated_at: ~U[2025-08-05 18:20:23Z]}
+[notice] SIGTERM received - shutting down
+
+[info] DRAINING 1 of 1 total connection(s) for socket Phoenix.LiveView.Socket every 2000ms - round 1 of 1
+[info] DRAINING 1 of 1 total connection(s) for socket Phoenix.LiveReloader.Socket every 2000ms - round 1 of 1
+[notice] SIGTERM received - shutting down
+

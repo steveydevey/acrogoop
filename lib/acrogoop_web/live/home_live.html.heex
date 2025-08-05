@@ -1,0 +1,118 @@
+<div class="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-6">
+  <div class="max-w-md w-full">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-white mb-2">🎯 Acrogoop</h1>
+      <p class="text-indigo-100">Multiplayer phrase creation game</p>
+    </div>
+
+    <!-- Create Game Card -->
+    <div class="bg-white rounded-lg shadow-xl p-6 mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Create New Game</h2>
+      
+      <form phx-submit="create_game" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Your Name</label>
+          <input
+            type="text"
+            name="creator_name"
+            value={@creator_name}
+            phx-change="update_creator_name"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            placeholder="Enter your name"
+            required
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Rounds</label>
+            <select
+              name="rounds_total"
+              phx-change="update_rounds"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+              <%= for i <- 1..10 do %>
+                <option value={i} selected={i == @rounds_total}><%= i %></option>
+              <% end %>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Round Time (s)</label>
+            <select
+              name="round_time_limit"
+              phx-change="update_round_time"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+              <%= for i <- [5, 10, 15, 20, 30, 45, 60] do %>
+                <option value={i} selected={i == @round_time_limit}><%= i %>s</option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Voting Time (s)</label>
+          <select
+            name="voting_time_limit"
+            phx-change="update_voting_time"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          >
+            <%= for i <- [5, 10, 15, 20, 30] do %>
+              <option value={i} selected={i == @voting_time_limit}><%= i %>s</option>
+            <% end %>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Create Game
+        </button>
+      </form>
+    </div>
+
+    <!-- Join Game Card -->
+    <div class="bg-white rounded-lg shadow-xl p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Join Existing Game</h2>
+      
+      <form phx-submit="join_game" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Game Code</label>
+          <input
+            type="text"
+            name="game_code"
+            value={@game_code}
+            phx-change="update_game_code"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 font-mono uppercase"
+            placeholder="Enter game code"
+            maxlength="6"
+            style="text-transform: uppercase"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+        >
+          Join Game
+        </button>
+      </form>
+    </div>
+
+    <!-- How to Play -->
+    <div class="bg-white bg-opacity-20 rounded-lg p-4 mt-6 text-white">
+      <h3 class="font-semibold mb-2">How to Play:</h3>
+      <ul class="text-sm space-y-1 text-indigo-100">
+        <li>• Create phrases using the given letters in order</li>
+        <li>• Each word must start with the corresponding letter</li>
+        <li>• Vote for your favorite phrase each round</li>
+        <li>• Earn 100 points for each vote you receive</li>
+        <li>• Highest score after all rounds wins!</li>
+      </ul>
+    </div>
+  </div>
+</div>
