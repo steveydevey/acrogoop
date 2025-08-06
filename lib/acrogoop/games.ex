@@ -17,8 +17,8 @@ defmodule Acrogoop.Games do
       code: code,
       creator_name: creator_name,
       rounds_total: Map.get(opts, :rounds_total, 3),
-      round_time_limit: Map.get(opts, :round_time_limit, 10),
-      voting_time_limit: Map.get(opts, :voting_time_limit, 10)
+      round_time_limit: Map.get(opts, :round_time_limit, 30),
+      voting_time_limit: Map.get(opts, :voting_time_limit, 120)
     }
 
     %Game{}
@@ -109,7 +109,7 @@ defmodule Acrogoop.Games do
     game = Repo.get!(Game, game_id)
 
     game
-    |> Game.changeset(%{status: :voting})
+    |> Game.changeset(%{status: :voting, ready_players: []})
     |> Repo.update()
   end
 
@@ -135,6 +135,61 @@ defmodule Acrogoop.Games do
       |> Vote.changeset(attrs)
       |> Repo.insert()
     end
+  end
+
+  @doc """
+  Marks a player as ready during voting phase.
+  """
+  def mark_player_ready(game_id, player_id) do
+    game = Repo.get!(Game, game_id)
+    
+    updated_ready_players = 
+      if player_id in game.ready_players do
+        game.ready_players
+      else
+        [player_id | game.ready_players]
+      end
+
+    game
+    |> Game.changeset(%{ready_players: updated_ready_players})
+    |> Repo.update()
+  end
+
+  @doc """
+  Marks a player as not ready during voting phase.
+  """
+  def mark_player_not_ready(game_id, player_id) do
+    game = Repo.get!(Game, game_id)
+    
+    updated_ready_players = Enum.reject(game.ready_players, &(&1 == player_id))
+
+    game
+    |> Game.changeset(%{ready_players: updated_ready_players})
+    |> Repo.update()
+  end
+
+  @doc """
+  Checks if all players are ready for voting completion.
+  """
+  def all_players_ready?(game_id) do
+    game = Repo.get!(Game, game_id) |> Repo.preload(:players)
+    
+    active_player_ids = Enum.map(game.players, & &1.id)
+    ready_count = length(game.ready_players)
+    total_count = length(active_player_ids)
+    
+    ready_count > 0 && ready_count == total_count
+  end
+
+  @doc """
+  Resets ready status for all players (called when transitioning game states).
+  """
+  def reset_ready_status(game_id) do
+    game = Repo.get!(Game, game_id)
+    
+    game
+    |> Game.changeset(%{ready_players: []})
+    |> Repo.update()
   end
 
   @doc """
@@ -177,13 +232,14 @@ defmodule Acrogoop.Games do
       |> Game.changeset(%{
         current_round: game.current_round + 1,
         current_letters: letters,
-        status: :in_progress
+        status: :in_progress,
+        ready_players: []
       })
       |> Repo.update()
     else
       # Complete game
       game
-      |> Game.changeset(%{status: :completed})
+      |> Game.changeset(%{status: :completed, ready_players: []})
       |> Repo.update()
     end
   end

@@ -108,6 +108,45 @@
             <% :voting -> %>
               <div>
                 <h2 class="text-xl font-semibold mb-4">Vote for your favorite phrase:</h2>
+                
+                <!-- Ready Status -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <p class="text-sm font-medium text-yellow-800">
+                      Ready Status: <%= @ready_count %>/<%= @total_players %> players ready
+                    </p>
+                    <div class="text-xs text-yellow-600">
+                      <%= if @ready_count == @total_players and @total_players > 0 do %>
+                        🚀 All ready! Moving to next round...
+                      <% else %>
+                        ⏰ <%= @time_remaining %>s remaining
+                      <% end %>
+                    </div>
+                  </div>
+                  
+                  <%= if @player_is_ready do %>
+                    <div class="flex items-center justify-between">
+                      <span class="text-green-700 font-medium">✓ You're ready!</span>
+                      <button
+                        phx-click="mark_not_ready"
+                        class="bg-gray-500 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      >
+                        Not Ready
+                      </button>
+                    </div>
+                  <% else %>
+                    <div class="flex items-center justify-between">
+                      <span class="text-gray-600">Mark yourself ready when done voting</span>
+                      <button
+                        phx-click="mark_ready"
+                        class="bg-green-600 text-white px-3 py-1 rounded-md text-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                      >
+                        Ready
+                      </button>
+                    </div>
+                  <% end %>
+                </div>
+
                 <div class="space-y-3">
                   <%= for submission <- @submissions do %>
                     <div class={"border rounded-lg p-4 #{if submission.player_id == @player.id, do: "bg-blue-50 border-blue-200", else: "hover:bg-gray-50"}"}>

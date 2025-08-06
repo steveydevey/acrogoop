@@ -10,6 +10,7 @@ defmodule Acrogoop.Player do
     field :session_id, :string
     field :score, :integer, default: 0
     field :is_creator, :boolean, default: false
+    field :is_ready, :boolean, default: false
 
     belongs_to :game, Acrogoop.Game
     has_many :submissions, Acrogoop.Submission
@@ -20,7 +21,7 @@ defmodule Acrogoop.Player do
 
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:name, :session_id, :score, :is_creator, :game_id])
+    |> cast(attrs, [:name, :session_id, :score, :is_creator, :is_ready, :game_id])
     |> validate_required([:name, :session_id, :game_id])
     |> validate_length(:name, min: 1, max: 50)
     |> unique_constraint([:session_id, :game_id])

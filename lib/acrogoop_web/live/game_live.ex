@@ -38,6 +38,9 @@ defmodule AcrogoopWeb.GameLive do
          |> assign(:player_name, "")
          |> assign(:phrase_input, "")
          |> assign(:voting_for, nil)
+         |> assign(:player_is_ready, false)
+         |> assign(:ready_count, 0)
+         |> assign(:total_players, 0)
          |> refresh_game_state()}
     end
   end
@@ -110,6 +113,48 @@ defmodule AcrogoopWeb.GameLive do
   end
 
   @impl true
+  def handle_event("mark_ready", _, socket) do
+    case Games.mark_player_ready(socket.assigns.game.id, socket.assigns.player.id) do
+      {:ok, _game} ->
+        broadcast_update(socket.assigns.game.code)
+        
+        # Check if all players are ready
+        if Games.all_players_ready?(socket.assigns.game.id) do
+          # Complete voting early
+          Games.complete_round(socket.assigns.game.id)
+          broadcast_update(socket.assigns.game.code)
+          
+          # Start next round timer if game continues
+          game = Games.get_game_by_code(socket.assigns.game.code)
+          if game.status == :in_progress do
+            start_round_timer(socket.assigns.game.code, game.round_time_limit)
+          end
+        end
+        
+        {:noreply, refresh_game_state(socket)}
+
+      {:error, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Could not mark as ready")}
+    end
+  end
+
+  @impl true
+  def handle_event("mark_not_ready", _, socket) do
+    case Games.mark_player_not_ready(socket.assigns.game.id, socket.assigns.player.id) do
+      {:ok, _game} ->
+        broadcast_update(socket.assigns.game.code)
+        {:noreply, refresh_game_state(socket)}
+
+      {:error, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Could not mark as not ready")}
+    end
+  end
+
+  @impl true
   def handle_event("update_phrase", %{"phrase" => phrase}, socket) do
     {:noreply, assign(socket, :phrase_input, phrase)}
   end
@@ -177,11 +222,19 @@ defmodule AcrogoopWeb.GameLive do
         nil
     end
 
+    # Calculate ready status
+    player_is_ready = player && player.id in game.ready_players
+    ready_count = length(game.ready_players)
+    total_players = length(players)
+
     socket
     |> assign(:game, game)
     |> assign(:player, player)
     |> assign(:submissions, submissions)
     |> assign(:players, players)
+    |> assign(:player_is_ready, player_is_ready)
+    |> assign(:ready_count, ready_count)
+    |> assign(:total_players, total_players)
   end
 
   defp broadcast_update(game_code) do

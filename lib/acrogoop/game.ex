@@ -9,11 +9,12 @@ defmodule Acrogoop.Game do
     field :code, :string
     field :status, Ecto.Enum, values: [:waiting, :in_progress, :voting, :completed]
     field :rounds_total, :integer, default: 3
-    field :round_time_limit, :integer, default: 10
-    field :voting_time_limit, :integer, default: 10
+    field :round_time_limit, :integer, default: 30
+    field :voting_time_limit, :integer, default: 120
     field :current_round, :integer, default: 1
     field :current_letters, :string
     field :creator_name, :string
+    field :ready_players, {:array, :binary_id}, default: []
 
     has_many :players, Acrogoop.Player
     has_many :submissions, Acrogoop.Submission
@@ -25,11 +26,11 @@ defmodule Acrogoop.Game do
   def changeset(game, attrs) do
     game
     |> cast(attrs, [:code, :status, :rounds_total, :round_time_limit, :voting_time_limit, 
-                    :current_round, :current_letters, :creator_name])
+                    :current_round, :current_letters, :creator_name, :ready_players])
     |> validate_required([:code, :creator_name])
     |> validate_inclusion(:rounds_total, 1..10)
     |> validate_inclusion(:round_time_limit, 5..60)
-    |> validate_inclusion(:voting_time_limit, 5..30)
+    |> validate_inclusion(:voting_time_limit, 5..300)
     |> unique_constraint(:code)
   end
 
