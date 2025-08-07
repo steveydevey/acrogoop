@@ -8,14 +8,8 @@ defmodule Acrogoop.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      AcrogoopWeb.Telemetry,
       Acrogoop.Repo,
-      {DNSCluster, query: Application.get_env(:acrogoop, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Acrogoop.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: Acrogoop.Finch},
-      # Start a worker by calling: Acrogoop.Worker.start_link(arg)
-      # {Acrogoop.Worker, arg},
       # Start to serve requests, typically the last entry
       AcrogoopWeb.Endpoint
     ]

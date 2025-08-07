@@ -59,7 +59,7 @@
             phx-change="update_voting_time"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
-            <%= for i <- [5, 10, 15, 20, 30] do %>
+            <%= for i <- [5, 10, 15, 20, 30, 45, 60, 90, 120] do %>
               <option value={i} selected={i == @voting_time_limit}><%= i %>s</option>
             <% end %>
           </select>

@@ -27,21 +27,22 @@ defmodule AcrogoopWeb.GameLive do
          |> redirect(to: "/")}
 
       game ->
-        {:ok,
-         socket
-         |> assign(:game, game)
-         |> assign(:session_id, session_id)
-         |> assign(:player, nil)
-         |> assign(:submissions, [])
-         |> assign(:players, [])
-         |> assign(:time_remaining, 0)
-         |> assign(:player_name, "")
-         |> assign(:phrase_input, "")
-         |> assign(:voting_for, nil)
-         |> assign(:player_is_ready, false)
-         |> assign(:ready_count, 0)
-         |> assign(:total_players, 0)
-         |> refresh_game_state()}
+                 {:ok,
+          socket
+          |> assign(:game, game)
+          |> assign(:session_id, session_id)
+          |> assign(:player, nil)
+          |> assign(:submissions, [])
+          |> assign(:players, [])
+          |> assign(:time_remaining, 0)
+          |> assign(:player_name, "")
+          |> assign(:phrase_input, "")
+          |> assign(:phrase_valid, false)
+          |> assign(:voting_for, nil)
+          |> assign(:player_is_ready, false)
+          |> assign(:ready_count, 0)
+          |> assign(:total_players, 0)
+          |> refresh_game_state()}
     end
   end
 
@@ -81,19 +82,40 @@ defmodule AcrogoopWeb.GameLive do
 
   @impl true
   def handle_event("submit_phrase", %{"phrase" => phrase}, socket) do
-    case Games.submit_phrase(socket.assigns.game.id, socket.assigns.player.id, phrase) do
-      {:ok, _submission} ->
-        broadcast_update(socket.assigns.game.code)
-        
-        {:noreply,
-         socket
-         |> assign(:phrase_input, "")
-         |> refresh_game_state()}
+    # Validate phrase matches letter sequence
+    unless phrase_matches_letters?(phrase, socket.assigns.game.current_letters) do
+      {:noreply,
+       socket
+       |> put_flash(:error, "Phrase must start with letters: #{socket.assigns.game.current_letters}")}
+    else
+      case Games.submit_phrase(socket.assigns.game.id, socket.assigns.player.id, phrase) do
+        {:ok, _submission} ->
+          broadcast_update(socket.assigns.game.code)
+          
+          # Check if all players have submitted
+          game = Games.get_game_by_code(socket.assigns.game.code)
+          submissions = Games.get_current_submissions(game.id)
+          players = Games.get_players_by_score(game.id)
+          
+                  if all_players_submitted?(submissions, players) do
+          # All players have submitted - move to voting
+          Games.start_voting(socket.assigns.game.id)
+          broadcast_update(socket.assigns.game.code)
+          # Stop any existing round timer by setting time to 0
+          PubSub.broadcast(Acrogoop.PubSub, "game:#{socket.assigns.game.code}", {:round_timer, 0})
+          start_voting_timer(socket.assigns.game.code, socket.assigns.game.voting_time_limit)
+        end
+          
+          {:noreply,
+           socket
+           |> assign(:phrase_input, "")
+           |> refresh_game_state()}
 
-      {:error, _changeset} ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "Could not submit phrase")}
+        {:error, _changeset} ->
+          {:noreply,
+           socket
+           |> put_flash(:error, "Could not submit phrase")}
+      end
     end
   end
 
@@ -156,7 +178,13 @@ defmodule AcrogoopWeb.GameLive do
 
   @impl true
   def handle_event("update_phrase", %{"phrase" => phrase}, socket) do
-    {:noreply, assign(socket, :phrase_input, phrase)}
+    # Validate phrase in real-time
+    is_valid = phrase_matches_letters?(phrase, socket.assigns.game.current_letters)
+    
+    {:noreply, 
+     socket
+     |> assign(:phrase_input, phrase)
+     |> assign(:phrase_valid, is_valid)}
   end
 
   @impl true
@@ -172,10 +200,13 @@ defmodule AcrogoopWeb.GameLive do
   @impl true
   def handle_info({:round_timer, time_remaining}, socket) do
     if time_remaining <= 0 do
-      # Time's up - move to voting
-      Games.start_voting(socket.assigns.game.id)
-      broadcast_update(socket.assigns.game.code)
-      start_voting_timer(socket.assigns.game.code, socket.assigns.game.voting_time_limit)
+      # Time's up - move to voting (only if not already in voting)
+      game = Games.get_game_by_code(socket.assigns.game.code)
+      if game.status == :in_progress do
+        Games.start_voting(socket.assigns.game.id)
+        broadcast_update(socket.assigns.game.code)
+        start_voting_timer(socket.assigns.game.code, socket.assigns.game.voting_time_limit)
+      end
     end
     
     {:noreply, assign(socket, :time_remaining, time_remaining)}
@@ -269,6 +300,32 @@ defmodule AcrogoopWeb.GameLive do
 
   defp player_has_submitted?(submissions, player_id) do
     Enum.any?(submissions, &(&1.player_id == player_id))
+  end
+
+  defp all_players_submitted?(submissions, players) do
+    length(submissions) == length(players)
+  end
+
+  defp phrase_matches_letters?(phrase, letters) do
+    # Split phrase into words and get first letter of each word
+    words = String.split(phrase, " ", trim: true)
+    
+    # Check if we have the same number of words as letters
+    if length(words) != String.length(letters) do
+      false
+    else
+      # Get first letter of each word (case insensitive)
+      phrase_letters = words
+      |> Enum.map(fn word -> 
+        word 
+        |> String.first() 
+        |> String.upcase()
+      end)
+      |> Enum.join()
+      
+      # Compare with expected letters (case insensitive)
+      String.upcase(letters) == phrase_letters
+    end
   end
 
 end

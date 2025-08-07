@@ -16,20 +16,13 @@ config :acrogoop, AcrogoopWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: AcrogoopWeb.ErrorHTML, json: AcrogoopWeb.ErrorJSON],
+    formats: [html: {AcrogoopWeb.ErrorHTML, :error}, json: {AcrogoopWeb.ErrorJSON, :error}],
     layout: false
   ],
   pubsub_server: Acrogoop.PubSub,
   live_view: [signing_salt: "O7puelbQ"]
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
-config :acrogoop, Acrogoop.Mailer, adapter: Swoosh.Adapters.Local
+
 
 # Configure esbuild (the version is required)
 config :esbuild,

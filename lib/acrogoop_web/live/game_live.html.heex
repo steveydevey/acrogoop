@@ -7,7 +7,12 @@
       <p class="text-sm text-gray-500">
         Round <%= @game.current_round %>/<%= @game.rounds_total %>
         <%= if @time_remaining > 0 do %>
-          • <%= @time_remaining %>s remaining
+          <%= case @game.status do %>
+            <% :in_progress -> %>
+              • <%= @time_remaining %>s to submit
+            <% :voting -> %>
+              • <%= @time_remaining %>s to vote
+          <% end %>
         <% end %>
       </p>
     </div>
@@ -79,29 +84,40 @@
                     <p class="text-gray-600">Waiting for other players...</p>
                   </div>
                 <% else %>
-                  <form phx-submit="submit_phrase" class="space-y-4">
-                    <div>
-                      <label class="block text-sm font-medium text-gray-700">Your phrase:</label>
-                      <input
-                        type="text"
-                        name="phrase"
-                        value={@phrase_input}
-                        phx-change="update_phrase"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        placeholder="Enter your creative phrase..."
-                        required
-                      />
-                      <p class="text-xs text-gray-500 mt-1">
-                        Create a phrase where each word starts with the given letters in order
-                      </p>
-                    </div>
-                    <button
-                      type="submit"
-                      class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
-                      Submit Phrase
-                    </button>
-                  </form>
+                                     <form phx-submit="submit_phrase" class="space-y-4">
+                     <div>
+                       <label class="block text-sm font-medium text-gray-700">Your phrase:</label>
+                       <input
+                         type="text"
+                         name="phrase"
+                         value={@phrase_input}
+                         phx-change="update_phrase"
+                         class={"mt-1 block w-full rounded-md shadow-sm focus:ring-indigo-500 #{if @phrase_valid and @phrase_input != "", do: "border-green-300 focus:border-green-500", else: "border-gray-300 focus:border-indigo-500"}"}
+                         placeholder="Enter your creative phrase..."
+                         required
+                       />
+                       <div class="mt-1">
+                         <%= if @phrase_input != "" do %>
+                           <%= if @phrase_valid do %>
+                             <p class="text-xs text-green-600">✓ Valid phrase! Each word starts with the correct letter.</p>
+                           <% else %>
+                             <p class="text-xs text-red-600">✗ Phrase must have <%= String.length(@game.current_letters) %> words starting with: <%= @game.current_letters %></p>
+                           <% end %>
+                         <% else %>
+                           <p class="text-xs text-gray-500">
+                             Create a phrase where each word starts with the given letters in order
+                           </p>
+                         <% end %>
+                       </div>
+                     </div>
+                     <button
+                       type="submit"
+                       disabled={!@phrase_valid or @phrase_input == ""}
+                       class={"w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 #{if @phrase_valid and @phrase_input != "", do: "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500", else: "bg-gray-300 text-gray-500 cursor-not-allowed"}"}
+                     >
+                       Submit Phrase
+                     </button>
+                   </form>
                 <% end %>
               </div>
 
@@ -189,26 +205,28 @@
 
         <!-- Sidebar -->
         <div>
-          <!-- Players List -->
-          <div class="bg-gray-50 rounded-lg p-4">
-            <h3 class="font-semibold mb-3">Players (<%= length(@players) %>)</h3>
-            <div class="space-y-2">
-              <%= for player <- @players do %>
-                <div class="flex justify-between items-center">
-                  <span class="text-sm">
-                    <%= player.name %>
-                    <%= if player.is_creator do %>
-                      <span class="text-xs text-indigo-600">👑</span>
-                    <% end %>
-                  </span>
-                  <span class="text-sm font-medium"><%= player.score %>pts</span>
-                </div>
-              <% end %>
+          <!-- Players List - Only show after voting is complete -->
+          <%= if @game.status == :completed or (@game.status == :in_progress and @game.current_round > 1) do %>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="font-semibold mb-3">Players (<%= length(@players) %>)</h3>
+              <div class="space-y-2">
+                <%= for player <- @players do %>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm">
+                      <%= player.name %>
+                      <%= if player.is_creator do %>
+                        <span class="text-xs text-indigo-600">👑</span>
+                      <% end %>
+                    </span>
+                    <span class="text-sm font-medium"><%= player.score %>pts</span>
+                  </div>
+                <% end %>
+              </div>
             </div>
-          </div>
+          <% end %>
 
-          <!-- Current Round Submissions -->
-          <%= if @game.status in [:voting, :in_progress] and length(@submissions) > 0 do %>
+          <!-- Current Round Submissions - Only show during voting phase -->
+          <%= if @game.status == :voting and length(@submissions) > 0 do %>
             <div class="bg-gray-50 rounded-lg p-4 mt-4">
               <h3 class="font-semibold mb-3">Submissions</h3>
               <div class="space-y-2">
@@ -219,6 +237,21 @@
                   </div>
                 <% end %>
               </div>
+            </div>
+          <% end %>
+
+          <!-- Submission Status - Show during in_progress phase -->
+          <%= if @game.status == :in_progress do %>
+            <div class="bg-gray-50 rounded-lg p-4 mt-4">
+              <h3 class="font-semibold mb-3">Submission Status</h3>
+              <div class="text-sm text-gray-600">
+                <%= length(@submissions) %> of <%= @total_players %> players have submitted
+              </div>
+              <%= if length(@submissions) == @total_players and @total_players > 0 do %>
+                <div class="text-green-600 font-medium mt-2">
+                  ✓ All players submitted! Moving to voting...
+                </div>
+              <% end %>
             </div>
           <% end %>
         </div>

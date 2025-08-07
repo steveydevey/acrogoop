@@ -14,8 +14,8 @@ defmodule AcrogoopWeb.HomeLive do
      |> assign(:creator_name, "")
      |> assign(:game_code, "")
      |> assign(:rounds_total, 3)
-     |> assign(:round_time_limit, 10)
-     |> assign(:voting_time_limit, 10)
+     |> assign(:round_time_limit, 30)
+     |> assign(:voting_time_limit, 120)
      |> assign(:session_id, session_id)}
   end
 

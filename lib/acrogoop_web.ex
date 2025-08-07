@@ -42,8 +42,6 @@ defmodule AcrogoopWeb do
         formats: [:html, :json],
         layouts: [html: AcrogoopWeb.Layouts]
 
-      use Gettext, backend: AcrogoopWeb.Gettext
-
       import Plug.Conn
 
       unquote(verified_routes())
@@ -82,9 +80,6 @@ defmodule AcrogoopWeb do
 
   defp html_helpers do
     quote do
-      # Translation
-      use Gettext, backend: AcrogoopWeb.Gettext
-
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components
